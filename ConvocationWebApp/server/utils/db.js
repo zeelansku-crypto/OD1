@@ -1,24 +1,35 @@
 const { Pool, types } = require('pg');
+const path = require('path');
+
+// Load environment variables from server .env and root .env if present
+try {
+  require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+} catch (e) {}
 require('dotenv').config();
 
 // Fix PostgreSQL DATE (OID 1082) parsing so it returns exact 'YYYY-MM-DD' strings without timezone/UTC drift
 types.setTypeParser(1082, (val) => val);
 
+const dbUrl = (process.env.DATABASE_URL || process.env.SUPABASE_DB_URL || '').trim();
+
 const poolConfig = {
-  connectionString: process.env.DATABASE_URL
+  connectionString: dbUrl || undefined,
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000
 };
 
 // Add SSL for remote servers (e.g. Supabase, Render), exclude for localhost
-if (process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('localhost')) {
+if (dbUrl && !dbUrl.includes('localhost')) {
   poolConfig.ssl = { rejectUnauthorized: false };
-} else if (!process.env.DATABASE_URL) {
-  // If no DB URL is defined, pg defaults to local, so explicitly no ssl
-  // We can just rely on defaults.
 }
 
 const pool = new Pool(poolConfig);
 
 const initDb = async () => {
+    if (!dbUrl) {
+        console.warn('[DB] Skipping initDb: No DATABASE_URL configured');
+        return;
+    }
     const client = await pool.connect();
     try {
         await client.query('BEGIN');
@@ -281,6 +292,11 @@ const initDb = async () => {
 
 module.exports = {
   pool,
-  query: (text, params) => pool.query(text, params),
+  query: (text, params) => {
+    if (!process.env.DATABASE_URL && !process.env.SUPABASE_DB_URL) {
+      throw new Error('DATABASE_URL is not configured in Netlify Environment Variables. Please set DATABASE_URL in the Netlify site settings.');
+    }
+    return pool.query(text, params);
+  },
   initDb
 };

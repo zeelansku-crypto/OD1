@@ -45,7 +45,30 @@ app.use(async (req, res, next) => {
 
 // API Routes router
 const apiRouter = express.Router();
-apiRouter.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
+apiRouter.get('/health', async (req, res) => {
+    try {
+        const hasDbUrl = Boolean(process.env.DATABASE_URL || process.env.SUPABASE_DB_URL);
+        let dbOk = false;
+        let dbError = null;
+        if (hasDbUrl) {
+            try {
+                const db = require('./utils/db');
+                await db.query('SELECT 1');
+                dbOk = true;
+            } catch (e) {
+                dbError = e.message;
+            }
+        }
+        res.status(200).json({
+            status: 'ok',
+            databaseConfigured: hasDbUrl,
+            databaseConnected: dbOk,
+            databaseError: dbError
+        });
+    } catch (err) {
+        res.status(500).json({ status: 'error', error: err.message });
+    }
+});
 apiRouter.get('/storage-check', (req, res) => {
     const keyNames = Object.keys(process.env).filter(k => k.toLowerCase().includes('supabase'));
     const hasKey = Boolean(

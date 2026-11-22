@@ -18,7 +18,10 @@ export const login = async (email, password) => {
             throw new Error(response.status === 404 ? 'API service unavailable (404). Please ensure backend functions are deployed.' : `Server error (${response.status}): ${text.substring(0, 100)}`);
         }
 
-        if (!response.ok) throw new Error(data.message || 'Login failed');
+        if (!response.ok) {
+            const errorDetail = data.error ? `${data.message}: ${data.error}` : (data.message || 'Login failed');
+            throw new Error(errorDetail);
+        }
 
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
