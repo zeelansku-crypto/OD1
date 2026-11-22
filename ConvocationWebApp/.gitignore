@@ -1,0 +1,20 @@
+# Node
+node_modules/
+.env
+.env.local
+dist/
+
+# Database
+server/database/convocation.db*
+server/database/convocation_v2.db
+
+# Uploads and Temporary files
+server/uploads/*
+!server/uploads/.gitkeep
+server/temp/
+server/sample_report_*.pdf
+server/test_report_output.pdf
+
+# OS files
+.DS_Store
+Thumbs.db

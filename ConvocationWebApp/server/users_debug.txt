@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "name": "zeelan",
+    "email": "zeelan.sku@gmail.com",
+    "mobile": "9866714016",
+    "password_hash": "$2a$10$k0aM7Wl8MdjWerQr1elQhOx9VR3bczK899jThT4JDtGdF50cj2By.",
+    "role": "user",
+    "created_at": "2026-01-04 06:54:27"
+  },
+  {
+    "id": 2,
+    "name": "admin@example.com",
+    "email": "admin@example.com",
+    "mobile": "admin123",
+    "password_hash": "$2a$10$3yfwInWW49DKHH2Ie9nMIOf/r/1iZYqZPH/8WWBT3jHlLUpVRRQSS",
+    "role": "user",
+    "created_at": "2026-01-04 07:14:20"
+  },
+  {
+    "id": 3,
+    "name": "Test User",
+    "email": "test@example.com",
+    "mobile": "1234567890",
+    "password_hash": "$2a$10$USJ8PR00Vw4Ax7T6I/SujOGAPSJlYXICgzOm6o/.zvY3Fdva607rm",
+    "role": "user",
+    "created_at": "2026-01-05 17:37:52"
+  },
+  {
+    "id": 4,
+    "name": "Admin User",
+    "email": "admin@admin.com",
+    "mobile": "1234567890",
+    "password_hash": "$2a$10$9BeMU2uKuASz08XHlahQyuR4vm1CwyKmheQRN4CR8EU7sGCqfIMvK",
+    "role": "user",
+    "created_at": "2026-01-10 06:43:22"
+  },
+  {
+    "id": 5,
+    "name": "admin",
+    "email": "admin123@gmail.com",
+    "mobile": "8978435746",
+    "password_hash": "$2a$10$P7jG6qBhyzh7CD/IFlPksOp/rnj5nFxEKw/ISlogCJf/DS33Z8/SK",
+    "role": "user",
+    "created_at": "2026-01-10 16:03:46"
+  }
+]
