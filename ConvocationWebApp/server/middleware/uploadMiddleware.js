@@ -2,10 +2,14 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure uploads directory exists (redundant check, also in db.js but safe here)
+// Ensure uploads directory exists (safe for serverless / read-only environments)
 const uploadDir = path.resolve(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+try {
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+} catch (e) {
+    // Read-only filesystem in serverless environments (Netlify / AWS Lambda)
 }
 
 const storage = multer.memoryStorage();

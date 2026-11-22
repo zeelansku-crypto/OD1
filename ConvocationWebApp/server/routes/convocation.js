@@ -8,8 +8,12 @@ const path = require('path');
 const router = express.Router();
 
 const uploadDir = path.resolve(__dirname, '../uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+try {
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+} catch (e) {
+    // Read-only filesystem in serverless environments (Netlify / AWS Lambda)
 }
 
 // File upload configuration for multiple fields
