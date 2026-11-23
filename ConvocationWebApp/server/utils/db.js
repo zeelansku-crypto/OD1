@@ -3,8 +3,8 @@ const path = require('path');
 
 // Load environment variables from server .env and root .env if present
 try {
-  require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
-} catch (e) {}
+    require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+} catch (e) { }
 require('dotenv').config();
 
 // Fix PostgreSQL DATE (OID 1082) parsing so it returns exact 'YYYY-MM-DD' strings without timezone/UTC drift
@@ -13,14 +13,14 @@ types.setTypeParser(1082, (val) => val);
 const dbUrl = (process.env.DATABASE_URL || process.env.SUPABASE_DB_URL || '').trim();
 
 const poolConfig = {
-  connectionString: dbUrl || undefined,
-  connectionTimeoutMillis: 10000,
-  idleTimeoutMillis: 30000
+    connectionString: dbUrl || undefined,
+    connectionTimeoutMillis: 10000,
+    idleTimeoutMillis: 30000
 };
 
 // Add SSL for remote servers (e.g. Supabase, Render), exclude for localhost
 if (dbUrl && !dbUrl.includes('localhost')) {
-  poolConfig.ssl = { rejectUnauthorized: false };
+    poolConfig.ssl = { rejectUnauthorized: false };
 }
 
 const pool = new Pool(poolConfig);
@@ -132,7 +132,7 @@ const initDb = async () => {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
         await seedMasterData('category_master', 'category_code', 'category_name', [
-            ['NA', 'Not Applicable'], ['OC', 'Open Category'], ['BC', 'Backward Class'], 
+            ['NA', 'Not Applicable'], ['OC', 'Open Category'], ['BC', 'Backward Class'],
             ['SC', 'Scheduled Caste'], ['ST', 'Scheduled Tribe'], ['OTHERS', 'Others']
         ]);
 
@@ -157,7 +157,7 @@ const initDb = async () => {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
         await seedMasterData('faculty_master', 'faculty_code', 'faculty_name', [
-            ['ARTS', 'Faculty of Arts'], ['SCIENCE', 'Faculty of Science'], 
+            ['ARTS', 'Faculty of Arts'], ['SCIENCE', 'Faculty of Science'],
             ['COMMERCE', 'Faculty of Commerce'], ['MANAGEMENT', 'Faculty of Management']
         ]);
 
@@ -183,7 +183,7 @@ const initDb = async () => {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
         await seedMasterData('subject_master', 'subject_code', 'subject_name', [
-            ['HIS', 'HISTORY'], ['ECO', 'ECONOMICS'], ['COM', 'COMMERCE'], 
+            ['HIS', 'HISTORY'], ['ECO', 'ECONOMICS'], ['COM', 'COMMERCE'],
             ['MAT', 'MATHEMATICS'], ['POL', 'POLITICAL SCIENCE']
         ]);
 
@@ -291,12 +291,12 @@ const initDb = async () => {
 };
 
 module.exports = {
-  pool,
-  query: (text, params) => {
-    if (!process.env.DATABASE_URL && !process.env.SUPABASE_DB_URL) {
-      throw new Error('DATABASE_URL is not configured in Netlify Environment Variables. Please set DATABASE_URL in the Netlify site settings.');
-    }
-    return pool.query(text, params);
-  },
-  initDb
+    pool,
+    query: (text, params) => {
+        if (!process.env.DATABASE_URL && !process.env.SUPABASE_DB_URL) {
+            throw new Error('DATABASE_URL is not configured in Netlify Environment Variables. Please set DATABASE_URL in the Netlify site settings.');
+        }
+        return pool.query(text, params);
+    },
+    initDb
 };
