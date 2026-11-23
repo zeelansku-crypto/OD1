@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convocation Management - Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module" crossorigin src="/assets/main-B1m2mwaO.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/auth-Des4prBP.js">
+  <link rel="stylesheet" crossorigin href="/assets/auth-C-WlY0rL.css">
+</head>
+
+<body class="bg-gray-50 flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gray-800 text-white flex flex-col transition-all duration-300" id="sidebar">
+        <div class="h-16 flex items-center justify-center border-b border-gray-700">
+            <h1 class="text-xl font-bold">University Portal</h1>
+        </div>
+        <nav class="flex-1 px-2 py-4 space-y-2">
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 bg-gray-900"
+                data-target="dashboard">Dashboard</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700"
+                data-target="certificates">Certificates</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 ml-4 border-l-2 border-gray-600"
+                data-target="generate-report">Download Convocation for Old Students</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700"
+                data-target="convocation-entry">Convocation (Old Students)</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700"
+                data-target="download-convocation">Download Convocation</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700"
+                data-target="edit-convocation">Edit Application</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden" id="manageCategoriesLink"
+                data-target="manage-categories">Manage Categories</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden" id="manageDegreesLink"
+                data-target="manage-degrees">Manage Degrees</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden" id="manageFacultiesLink"
+                data-target="manage-faculties">Manage Faculties</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden" id="manageCoursesLink"
+                data-target="manage-courses">Manage Courses</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden" id="manageSubjectsLink"
+                data-target="manage-subjects">Manage Subjects</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden"
+                id="manageSpecializationsLink" data-target="manage-specializations">Manage Specializations</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden" id="manageMediumsLink"
+                data-target="manage-mediums">Manage Mediums</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden"
+                id="managePaymentCategoriesLink" data-target="manage-payment-categories">Manage Payment Categories</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden" id="managePaymentModesLink"
+                data-target="manage-payment-modes">Manage Payment Modes</a>
+            <a href="#" class="nav-link block px-4 py-2 rounded-md hover:bg-gray-700 hidden"
+                id="manageConvocationIssuedLink" data-target="manage-convocation-issued">Manage Issued In</a>
+        </nav>
+        <div class="p-4 border-t border-gray-700">
+            <button id="logoutBtn"
+                class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md text-sm">Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6">
+            <button class="text-gray-500 focus:outline-none lg:hidden">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+            <div class="flex items-center space-x-4">
+                <span id="userName" class="text-gray-800 font-medium">User</span>
+                <!-- Avatar placeholder -->
+                <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">U
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-auto p-6" id="content-area">
+            <!-- Dynamic Content Loaded Here -->
+
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="content-view">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">University Portal Dashboard</h2>
+                    <button id="exportCsvBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md shadow-sm flex items-center text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Export CSV Data
+                    </button>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" id="dashboardSummaryCards">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
+                        <div class="p-3 bg-blue-100 rounded-lg text-blue-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-gray-500 text-xs font-semibold uppercase tracking-wider">Total Applications
+                            </h3>
+                            <p class="text-2xl font-bold text-gray-900" id="totalApplicationsCount">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    <!-- Mode of Study Distribution -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Mode of Study Distribution</h3>
+                        <div class="relative h-64">
+                            <canvas id="modeStudyChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Faculty-wise Applications -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-700">Faculty-wise Applications</h3>
+                        <div class="relative h-64">
+                            <canvas id="facultyWiseChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Tables Section -->
+                <div class="grid grid-cols-1 gap-8">
+                    <!-- Course-wise Applications Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-700">Top 10 Courses</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Course Group</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="courseWiseTableBody">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Mode + Degree Stats Table -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-700">Mode + Degree Distribution</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Mode</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Degree</th>
+                                        <th
+                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200" id="modeDegreeTableBody">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Convocation Entry Form (Module 1) -->
+            <div id="view-convocation-entry" class="content-view hidden">
+                <h2 class="text-2xl font-semibold mb-6 text-gray-800 border-b pb-2">Convocation Application Form <span
+                        class="text-sm font-normal text-gray-500">(Old Students)</span></h2>
+                <form id="convocationForm" class="bg-white p-8 rounded-lg shadow-lg border border-gray-100 space-y-8">
+
+                    <!-- Basic Details -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">University *</label>
+                            <input type="text" name="university" value="Sri Krishnadevaraya University" readonly
+                                required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-100 border p-2 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Reg. No / Hall Ticket No *</label>
+                            <input type="text" name="hall_ticket_no" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Name of Candidate *</label>
+                            <input type="text" name="candidate_name" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Name of Father *</label>
+                            <input type="text" name="father_name" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Date of Birth *</label>
+                            <input type="date" name="dob" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Gender *</label>
+                            <select name="gender" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Category *</label>
+                            <select name="category" required id="categorySelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Aadhar No *</label>
+                            <input type="text" name="aadhaar_no" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                    </div>
+
+                    <!-- Academic Details -->
+                    <h3 class="text-lg font-medium text-gray-900 border-b pb-1 mt-6">Academic Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Mode of Study *</label>
+                            <select name="mode_of_study" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="Regular">Regular</option>
+                                <option value="Private">Private</option>
+                                <option value="Distance">Distance</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Degree *</label>
+                            <select name="degree" required id="degreeSelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Degree</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Faculty *</label>
+                            <select name="faculty" required id="facultySelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">---Select Faculty---</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Course / Group *</label>
+                            <select name="course_group" required id="courseSelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">---Select Course---</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Subject *</label>
+                            <select name="subject" required id="subjectSelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Subject</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Specialization *</label>
+                            <select name="specialization" required id="specializationSelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Specialization</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Research Title</label>
+                            <input type="text" name="research_title"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Research Date</label>
+                            <input type="date" name="research_date"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Medium *</label>
+                            <select name="medium" required id="mediumSelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Medium</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Student Photo (Image) *</label>
+                            <input type="file" name="student_photo" accept="image/*" required
+                                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                    </div>
+
+
+                    <!-- Part Details -->
+                    <h3 class="text-lg font-medium text-gray-900 border-b pb-1 mt-6">Examination Details</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Part</th>
+                                    <th
+                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Class Awarded</th>
+                                    <th
+                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Month of Pass</th>
+                                    <th
+                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Year of Pass</th>
+                                    <th
+                                        class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Part I
+                                    </td>
+                                    <td><input type="text" name="part1_class"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part1_month"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part1_year"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part1_grade"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Part II
+                                    </td>
+                                    <td><input type="text" name="part2_class"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part2_month"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part2_year"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part2_grade"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Part III
+                                    </td>
+                                    <td><input type="text" name="part3_class"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part3_month"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part3_year"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                    <td><input type="text" name="part3_grade"
+                                            class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md border p-1">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Payment & Other Details -->
+                    <h3 class="text-lg font-medium text-gray-900 border-b pb-1 mt-6">Payment Details</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Payment Category *</label>
+                            <select name="payment_category" required id="paymentCategorySelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Payment Category</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Mode of Payment *</label>
+                            <select name="payment_mode" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Mode</option>
+                                <option value="Challan">Challan</option>
+                                <option value="DD">DD</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">DD / Challan No *</label>
+                            <input type="text" name="dd_challan_no" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">DD / Challan Date *</label>
+                            <input type="date" name="dd_challan_date" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Certificate (PDF) *</label>
+                            <input type="file" name="dd_challan_certificate" accept="application/pdf"
+                                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Bank Name</label>
+                            <input type="text" name="bank_name" id="bankName" readonly
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-100 border p-2 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Branch Name</label>
+                            <input type="text" name="branch_name" id="branchName" readonly
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-100 border p-2 cursor-not-allowed">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">IFSC Code</label>
+                            <select name="ifsc_code" id="ifscCode"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select IFSC Code</option>
+                                <option value="SBIN0016825">SBIN0016825</option>
+                                <option value="UBIN0815225">UBIN0815225</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Convocation Fee *</label>
+                            <input type="number" name="convocation_fee" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Convocation Issued In *</label>
+                            <select name="convocation_issued_in" required id="convocationIssuedSelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Option</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Academic Year *</label>
+                            <select name="academic_year" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Year</option>
+                                <option value="2000">2000</option>
+                                <option value="2001">2001</option>
+                                <option value="2002">2002</option>
+                                <option value="2003">2003</option>
+                                <option value="2004">2004</option>
+                                <option value="2005">2005</option>
+                                <option value="2006">2006</option>
+                                <option value="2007">2007</option>
+                                <option value="2008">2008</option>
+                                <option value="2009">2009</option>
+                                <option value="2010">2010</option>
+                                <option value="2011">2011</option>
+                                <option value="2012">2012</option>
+                                <option value="2013">2013</option>
+                                <option value="2014">2014</option>
+                                <option value="2015">2015</option>
+                                <option value="2016">2016</option>
+                                <option value="2017">2017</option>
+                                <option value="2018">2018</option>
+                                <option value="2019">2019</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Issued Date *</label>
+                            <input type="date" name="issued_date" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Manual Convocation Serial Number
+                                *</label>
+                            <input type="text" name="manual_serial_no" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Second Language</label>
+                            <select name="second_language" id="secondLanguageSelect"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Language</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Part II *</label>
+                            <select name="part_ii" id="partIISelect" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Option</option>
+                                <option value="MATHEMATICS,ELECTRONICS,COMPUTER SCIENCE">
+                                    MATHEMATICS,ELECTRONICS,COMPUTER SCIENCE</option>
+                                <option value="MATHEMATICS,STATISTICS,COMPUTER SCIENCE">MATHEMATICS,STATISTICS,COMPUTER
+                                    SCIENCE</option>
+                                <option value="Botany,Zoology,Chemistry">Botany,Zoology,Chemistry</option>
+                                <option value="MATHEMATICS,PHYSICS, COMPUTER SCIENCE">MATHEMATICS,PHYSICS, COMPUTER
+                                    SCIENCE</option>
+                                <option value="ZOOLOGY,BIOCHEMISTRY,CHEMISTRY">ZOOLOGY,BIOCHEMISTRY,CHEMISTRY</option>
+                                <option value="ADVANCED CORPORATE ACCOUNTS,MANAGEMENT ACCOUNTANCY">ADVANCED CORPORATE
+                                    ACCOUNTS,MANAGEMENT ACCOUNTANCY</option>
+                                <option value="RELATIONAL DBMS, INTERNET TECHNOLOGIES AND E-COMMERCE">RELATIONAL DBMS,
+                                    INTERNET TECHNOLOGIES AND E-COMMERCE</option>
+                                <option value="COST & MAN. ACCOUNTING,ADVANCED MANAGEMENT ACCOUNTING">COST & MAN.
+                                    ACCOUNTING,ADVANCED MANAGEMENT ACCOUNTING</option>
+                                <option value="RDBMS,OBJECT ORIENTED PROGRAMMING USING C++">RDBMS,OBJECT ORIENTED
+                                    PROGRAMMING USING C++</option>
+                                <option value="INSURANCE,ADVANCED BANKING">INSURANCE,ADVANCED BANKING</option>
+                                <option value="WEB TECHNOLOGIES,E-COMMERCE">WEB TECHNOLOGIES,E-COMMERCE</option>
+                                <option value="MATHEMATICS,ECONOMICS, STATISTICS">MATHEMATICS,ECONOMICS, STATISTICS
+                                </option>
+                                <option value="HISTORY,ECONOMICS,POLITICAL SCIENCE">HISTORY,ECONOMICS,POLITICAL SCIENCE
+                                </option>
+                                <option value="HISTORY,ECONOMICS, ADV. ENGLISH">HISTORY,ECONOMICS, ADV. ENGLISH</option>
+                                <option value="HISTORY,ECONOMICS, ADV. TELUGU">HISTORY,ECONOMICS, ADV. TELUGU</option>
+                                <option value="HISTORY,ECONOMICS,PSYCHOLOGY">HISTORY,ECONOMICS,PSYCHOLOGY</option>
+                                <option value="HISTORY,ECONOMICS, ADV. URDU">HISTORY,ECONOMICS, ADV. URDU</option>
+                                <option value="HISTORY,POLITICAL SCIENCE,ADV. ENGLISH">HISTORY,POLITICAL SCIENCE,ADV.
+                                    ENGLISH</option>
+                                <option value="HISTORY,ECONOMICS,RURAL DEVELOPMENT">HISTORY,ECONOMICS,RURAL DEVELOPMENT
+                                </option>
+                                <option value="HISTORY,POLITICAL SCIENCE,ADV. HINDI">HISTORY,POLITICAL SCIENCE,ADV.
+                                    HINDI</option>
+                                <option value="HISTORY,POLITICAL SCIENCE,ADV. TELUGU">HISTORY,POLITICAL SCIENCE,ADV.
+                                    TELUGU</option>
+                                <option value="HISTORY,POLITICAL SCIENCE,ADV. URDU">HISTORY,POLITICAL SCIENCE,ADV. URDU
+                                </option>
+                                <option value="HISTORY,POLITICAL SCIENCE,SOCIOLOGY">HISTORY,POLITICAL SCIENCE,SOCIOLOGY
+                                </option>
+                                <option value="ECONOMICS,POLITICAL SCIENCE,PHILOSOPHY">ECONOMICS,POLITICAL
+                                    SCIENCE,PHILOSOPHY</option>
+                                <option value="ECONOMICS,PUBLIC ADMINISTRATION,POLITICAL SCIENCE">ECONOMICS,PUBLIC
+                                    ADMINISTRATION,POLITICAL SCIENCE</option>
+                                <option value="RURAL DEVELOPMENT,SOCIOLOGY,PUBLIC ADMINISTRATION">RURAL
+                                    DEVELOPMENT,SOCIOLOGY,PUBLIC ADMINISTRATION</option>
+                                <option value="SOCIOLOGY,POLITICAL SCIENCE,GEOGRAPHY">SOCIOLOGY,POLITICAL
+                                    SCIENCE,GEOGRAPHY</option>
+                                <option value="HISTORY,POLITICAL SCIENCE,GEOGRAPHY">HISTORY,POLITICAL SCIENCE,GEOGRAPHY
+                                </option>
+                                <option value="SOCIOLOGY,PUBLIC ADMINISTRATION,POLITICAL SCIENCE">SOCIOLOGY,PUBLIC
+                                    ADMINISTRATION,POLITICAL SCIENCE</option>
+                                <option value="RURAL DEVELOPMENT,ECONOMICS,POLITICAL SCIENCE">RURAL
+                                    DEVELOPMENT,ECONOMICS,POLITICAL SCIENCE</option>
+                                <option value="INDUSTRIAL RELATIONS & PERSONNEL MANAGEMENT,ECONOMICS,PSYCHOLOGY">
+                                    INDUSTRIAL RELATIONS & PERSONNEL MANAGEMENT,ECONOMICS,PSYCHOLOGY</option>
+                                <option value="RURAL DEVELOPMENT,ADV. TELUGU,PSYCHOLOGY">RURAL DEVELOPMENT,ADV.
+                                    TELUGU,PSYCHOLOGY</option>
+                                <option value="HISTORY,ADV. ENGLISH,COMMUNICATIVE ENGLISH">HISTORY,ADV.
+                                    ENGLISH,COMMUNICATIVE ENGLISH</option>
+                                <option value="HISTORY,TOURISM & TRAVEL MANAGEMENT,ADV. ENGLISH">HISTORY,TOURISM &
+                                    TRAVEL MANAGEMENT,ADV. ENGLISH</option>
+                                <option value="HISTORY,ECONOMICS,JOURNALISM & MASS COMMUNICATION">
+                                    HISTORY,ECONOMICS,JOURNALISM & MASS COMMUNICATION</option>
+                                <option value="MATHEMATICS,ECONOMICS,COMPUTER APPLICATIONS">
+                                    MATHEMATICS,ECONOMICS,COMPUTER APPLICATIONS</option>
+                                <option value="ECONOMICS,STATISTICS,COMPUTER APPLICATIONS">ECONOMICS,STATISTICS,COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="MATHEMATICS,ECONOMICS, COMPUTER APPLICATIONS">MATHEMATICS,ECONOMICS,
+                                    COMPUTER APPLICATIONS</option>
+                                <option value="ECONOMICS,STATISTICS,COMPUTER APPLICATIONS">ECONOMICS,STATISTICS,COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="HISTORY,ECONOMICS,COMPUTER APPLICATIONS">HISTORY,ECONOMICS,COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="HISTORY,POL.SCI.COMPUTER APPLICATIONS">HISTORY,POL.SCI.COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="ECONOMICS,POL.SCI.COMPUTER APPLICATIONS">ECONOMICS,POL.SCI.COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="ECONOMICS,COMMERCE,COMPUTER APPLICATIONS">ECONOMICS,COMMERCE,COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="HISTORY,ECONOMICS,SOCIOLOGY">HISTORY,ECONOMICS,SOCIOLOGY</option>
+                                <option value="HISTORY,COMMUNICATIVE ENGLISH,COMPUTER APPLICATIONS">
+                                    HISTORY,COMMUNICATIVE ENGLISH,COMPUTER APPLICATIONS</option>
+                                <option value="ADVT & SALES MANAGEMENT,ECONOMICS,COMPUTER APPLICATIONS">ADVT & SALES
+                                    MANAGEMENT,ECONOMICS,COMPUTER APPLICATIONS</option>
+                                <option value="HISTORY,PUBLIC ADMINISTRATION,JOURNALISM & MASS COMMUNICATION">
+                                    HISTORY,PUBLIC ADMINISTRATION,JOURNALISM & MASS COMMUNICATION</option>
+                                <option value="HISTORY,ADV.URDU,COMPUTER APPLICATIONS">HISTORY,ADV.URDU,COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="HISTORY,POLITICAL SCIENCE, JOURNALISM & MASS COMMUNICATION">
+                                    HISTORY,POLITICAL SCIENCE, JOURNALISM & MASS COMMUNICATION</option>
+                                <option value="HISTORY,POLITICAL SCIENCE,ENGLISH FOR DIGITAL AGE">HISTORY,POLITICAL
+                                    SCIENCE,ENGLISH FOR DIGITAL AGE</option>
+                                <option value="HISTORY,ECONOMICS,TOURISM & TRAVEL MANAGEMENT">HISTORY,ECONOMICS,TOURISM
+                                    & TRAVEL MANAGEMENT</option>
+                                <option value="ZOOLOGY,PHYSICS,CHEMISTRY">ZOOLOGY,PHYSICS,CHEMISTRY</option>
+                                <option value="GEOLOGY,PHYSICS,CHEMISTRY">GEOLOGY,PHYSICS,CHEMISTRY</option>
+                                <option value="POLY.SCI,PHYSICS,CHEMISTRY">POLY.SCI,PHYSICS,CHEMISTRY</option>
+                                <option value="MATHEMATICS,PHYSICS,CHEMISTRY">MATHEMATICS,PHYSICS,CHEMISTRY</option>
+                                <option value="MATHEMATICS,PHYSICS,STATISTICS">MATHEMATICS,PHYSICS,STATISTICS</option>
+                                <option value="MATHEMATICS,PHYSICS,ELECTRONICS">MATHEMATICS,PHYSICS,ELECTRONICS</option>
+                                <option value="MATHEMATICS,PHYSICS,INSTRUMENTATION">MATHEMATICS,PHYSICS,INSTRUMENTATION
+                                </option>
+                                <option value="MATHEMATICS,PHYSICS,INDUSTRIAL CHEMISTRY">MATHEMATICS,PHYSICS,INDUSTRIAL
+                                    CHEMISTRY</option>
+                                <option value="HORTICULTURE,BOTANY,CHEMISTRY">HORTICULTURE,BOTANY,CHEMISTRY</option>
+                                <option value="BOTANY,ZOOLOGY,SERICULTURE">BOTANY,ZOOLOGY,SERICULTURE</option>
+                                <option value="BOTANY,AGRICULTURE,CHEMISTRY">BOTANY,AGRICULTURE,CHEMISTRY</option>
+                                <option value="ZOOLOGY,SERICULTURE,CHEMISTRY">ZOOLOGY,SERICULTURE,CHEMISTRY</option>
+                                <option value="ZOOLOGY,MICRO BIOLOGY,CHEMISTRY">ZOOLOGY,MICRO BIOLOGY,CHEMISTRY</option>
+                                <option value="BOTANY,MICRO BIOLOGY,CHEMISTRY">BOTANY,MICRO BIOLOGY,CHEMISTRY</option>
+                                <option value="BIO TECHNOLOGY,PHYSICS,INDUSTRIAL CHEMISTRY">BIO
+                                    TECHNOLOGY,PHYSICS,INDUSTRIAL CHEMISTRY</option>
+                                <option value="MATHEMATICS,STATISTICS,COMPUTER APPLICATIONS">
+                                    MATHEMATICS,STATISTICS,COMPUTER APPLICATIONS</option>
+                                <option value="MICRO BIOLOGY,BIO-CHEMISTRY,CHEMISTRY">MICRO
+                                    BIOLOGY,BIO-CHEMISTRY,CHEMISTRY</option>
+                                <option value="BIO TECHNOLOGY,MICRO BIOLOGY,CHEMISTRY">BIO TECHNOLOGY,MICRO
+                                    BIOLOGY,CHEMISTRY</option>
+                                <option value="BIO-CHEMISTRY,COMPUTER SCIENCE,CHEMISTRY">BIO-CHEMISTRY,COMPUTER
+                                    SCIENCE,CHEMISTRY</option>
+                                <option value="BIO-CHEMISTRY,BIO TECHNOLOGY,MICRO BIOLOGY">BIO-CHEMISTRY,BIO
+                                    TECHNOLOGY,MICRO BIOLOGY</option>
+                                <option value="MATHEMATICS,PHYSICS,COMPUTER APPLICATIONS">MATHEMATICS,PHYSICS,COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="MICRO BIOLOGY,COMPUTER APPLICATIONS,CHEMISTRY">MICRO BIOLOGY,COMPUTER
+                                    APPLICATIONS,CHEMISTRY</option>
+                                <option value="MEDICAL LAB TECHNOLOGIES,BIO-CHEMISTRY,CHEMISTRY">MEDICAL LAB
+                                    TECHNOLOGIES,BIO-CHEMISTRY,CHEMISTRY</option>
+                                <option value="MEDICAL LAB TECHNOLOGIES,MICRO BIOLOGY,CHEMISTRY">MEDICAL LAB
+                                    TECHNOLOGIES,MICRO BIOLOGY,CHEMISTRY</option>
+                                <option value="MEDICAL LAB TECHNOLOGIES,MICRO BIOLOGY,BIO-CHEMISTRY">MEDICAL LAB
+                                    TECHNOLOGIES,MICRO BIOLOGY,BIO-CHEMISTRY</option>
+                                <option value="BIO TECHNOLOGY,BIO-CHEMISTRY,CHEMISTRY">BIO
+                                    TECHNOLOGY,BIO-CHEMISTRY,CHEMISTRY</option>
+                                <option value="MATHEMATICS,ELECTRONICS,COMPUTER APPLICATIONS">
+                                    MATHEMATICS,ELECTRONICS,COMPUTER APPLICATIONS</option>
+                                <option value="BIO TECHNOLOGY,ZOOLOGY,CHEMISTRY">BIO TECHNOLOGY,ZOOLOGY,CHEMISTRY
+                                </option>
+                                <option value="MATHEMATICS,ACCOUNTS,COMPUTER APPLICATIONS">MATHEMATICS,ACCOUNTS,COMPUTER
+                                    APPLICATIONS</option>
+                                <option value="BOTANY,ZOOLOGY,INDUSTRIAL CHEMISTRY">BOTANY,ZOOLOGY,INDUSTRIAL CHEMISTRY
+                                </option>
+                                <option value="BIO TECHNOLOGIES,COMPUTER APPLICATIONS,CHEMISTRY">BIO
+                                    TECHNOLOGIES,COMPUTER APPLICATIONS,CHEMISTRY</option>
+                                <option value="GEOLOGY,PHYSICS,COMPUTER SCIENCE">GEOLOGY,PHYSICS,COMPUTER SCIENCE
+                                </option>
+                                <option value="CEMENT SCIENCE,COMPUTER SCIENCE,CHEMISTRY">CEMENT SCIENCE,COMPUTER
+                                    SCIENCE,CHEMISTRY</option>
+                                <option value="CHEMISTRY,ZOOLOGY,PARAMEDICAL TECHNOLOGY">CHEMISTRY,ZOOLOGY,PARAMEDICAL
+                                    TECHNOLOGY</option>
+                                <option value="BOTANY,CHEMISTRY,ORGANIC FARMING">BOTANY,CHEMISTRY,ORGANIC FARMING
+                                </option>
+                                <option value="MATHEMATICS,ECONOMIC,ECONOMETRICS">MATHEMATICS,ECONOMIC,ECONOMETRICS
+                                </option>
+                                <option value="ZOOLOGY,CHEMISTRY,SERICULTURE TECHNOLOGY">ZOOLOGY,CHEMISTRY,SERICULTURE
+                                    TECHNOLOGY</option>
+                                <option value="MATHEMATICS,COMPUTER SCIENCE,MULTIMEDIA">MATHEMATICS,COMPUTER
+                                    SCIENCE,MULTIMEDIA</option>
+                                <option value="MATHEMATICS,COMPUTER SCIENCE,CLOUD COMPUTING">MATHEMATICS,COMPUTER
+                                    SCIENCE,CLOUD COMPUTING</option>
+                                <option value="MATHEMATICS,CHEMISTRY,CEMENT CHEMISTRY">MATHEMATICS,CHEMISTRY,CEMENT
+                                    CHEMISTRY</option>
+                                <option value="MATHEMATICS,PHYSICS,RENEWABLE ENERGY">MATHEMATICS,PHYSICS,RENEWABLE
+                                    ENERGY</option>
+                                <option value="Mathematics, Physical Sciences">Mathematics, Physical Sciences</option>
+                                <option value="Mathematics, English">Mathematics, English</option>
+                                <option value="Mathematics, Telugu">Mathematics, Telugu</option>
+                                <option value="Mathematics, Urdu">Mathematics, Urdu</option>
+                                <option value="Physical Sciences, English">Physical Sciences, English</option>
+                                <option value="Physical Sciences, Telugu">Physical Sciences, Telugu</option>
+                                <option value="Physical Sciences, Urdu">Physical Sciences, Urdu</option>
+                                <option value="Biological Sciences, English">Biological Sciences, English</option>
+                                <option value="Biological Sciences, Telugu">Biological Sciences, Telugu</option>
+                                <option value="Biological Sciences, Urdu">Biological Sciences, Urdu</option>
+                                <option value="Social Studies, English">Social Studies, English</option>
+                                <option value="Social Studies, Telugu">Social Studies, Telugu</option>
+                                <option value="Social Studies, Urdu">Social Studies, Urdu</option>
+                                <option value="Biological Sciences, Physical Sciences">Biological Sciences, Physical
+                                    Sciences</option>
+                                <option value="SECR.PRACT.& OFF.MANG,OFF.MANG.& WEB TECH.">SECR.PRACT.&
+                                    OFF.MANG,OFF.MANG.& WEB TECH.</option>
+                                <option value="ADVANCED ACCOUNTS,BUSINESS MATHEMATICS">ADVANCED ACCOUNTS,BUSINESS
+                                    MATHEMATICS</option>
+                                <option value="MARKETING MANAGEMENT,RETAILING">MARKETING MANAGEMENT,RETAILING</option>
+                                <option value="BIO TECHNOLOGY,BOTANY,CHEMISTRY">BIO TECHNOLOGY,BOTANY,CHEMISTRY</option>
+                                <option value="FINANCIAL SERVICES,MARKETING OF FINANCIAL SERVICES">FINANCIAL
+                                    SERVICES,MARKETING OF FINANCIAL SERVICES</option>
+                                <option value="INCOME TAX">INCOME TAX</option>
+                                <option value="Human Resource Management">Human Resource Management</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="e-Business">e-Business</option>
+                                <option value="Financial Management">Financial Management</option>
+                                <option value="International Business Management">International Business Management
+                                </option>
+                                <option value="Operations Management">Operations Management</option>
+                                <option value="COST AND MANAGEMENT ACCOUNTING,CORPORATE ACCOUNTING,EN">COST AND
+                                    MANAGEMENT ACCOUNTING,CORPORATE ACCOUNTING,EN</option>
+                                <option value="CLOUD COMPUTING AND PYTHON,ENTERPRISE RESOURCE PLANNING">CLOUD COMPUTING
+                                    AND PYTHON,ENTERPRISE RESOURCE PLANNING</option>
+                                <option value="ECONOMICS,PUBLIC ADMINISTRATION,SOCIOLOGY">ECONOMICS,PUBLIC
+                                    ADMINISTRATION,SOCIOLOGY</option>
+                                <option value="HISTORY,POLITICAL SCIENCE,PUBLIC ADMINISTRATION">HISTORY,POLITICAL
+                                    SCIENCE,PUBLIC ADMINISTRATION</option>
+                                <option value="SOCIOLOGY, ADVANCE TELUGU, JOURNALISAM">SOCIOLOGY, ADVANCE TELUGU,
+                                    JOURNALISAM</option>
+                                <option value="RURAL DEVELOPMENT, SOCIOLOGY, COMPUTER APPLICATION">RURAL DEVELOPMENT,
+                                    SOCIOLOGY, COMPUTER APPLICATION</option>
+                                <option value="CORPORATE ACCOUNTING, BUSSINESS INFORMATION SYSTEM, WEB PROGRAMMING">
+                                    CORPORATE ACCOUNTING, BUSSINESS INFORMATION SYSTEM, WEB PROGRAMMING</option>
+                                <option
+                                    value="MANAGEMENT ACCOUNTING, CORPORATE ACCOUNTING, ADVANCED MANAGEMENT ACCOUNTING">
+                                    MANAGEMENT ACCOUNTING, CORPORATE ACCOUNTING, ADVANCED MANAGEMENT ACCOUNTING</option>
+                                <option
+                                    value="PRODUCTION & OPERATION MANAGEMENT, BUSINESS POLICY AND STRATEGIC MANAGEMENT, BUSSINESS LAW, INCOME TAX & TAX PLANNING, INTERNET TECHNOLOGY AND WEB COMMERCE">
+                                    PRODUCTION & OPERATION MANAGEMENT, BUSINESS POLICY AND STRATEGIC MANAGEMENT,
+                                    BUSSINESS LAW, INCOME TAX & TAX PLANNING, INTERNET TECHNOLOGY AND WEB COMMERCE
+                                </option>
+                                <option
+                                    value="ADVANCED ACCOUNTANCY, COMMERCIAL & INDUSTRIAL LAW, AUDITING & COMPANY LAW, MANAGEMENT ACCOUNTANCY, INCOME TAX, COST ACCOUNTANCY">
+                                    ADVANCED ACCOUNTANCY, COMMERCIAL & INDUSTRIAL LAW, AUDITING & COMPANY LAW,
+                                    MANAGEMENT ACCOUNTANCY, INCOME TAX, COST ACCOUNTANCY</option>
+                                <option
+                                    value="ASSESSMENT OF TAX, CORPORATE TAXATION, GOODS AND SERVICE TAX, CUSTOMS ACT, TAX PLANNING AND MANAGEMENT">
+                                    ASSESSMENT OF TAX, CORPORATE TAXATION, GOODS AND SERVICE TAX, CUSTOMS ACT, TAX
+                                    PLANNING AND MANAGEMENT</option>
+                                <option
+                                    value="PROGRAMMING IN JAVA, INTERNET TECHNOLOGY WEB COMMERCE, DATA COMMUNICATIONS, COMPUTER ORGZ AND OPERATING SYSTEM, VISUAL BASIC, NETWORK PROGRAMMING">
+                                    PROGRAMMING IN JAVA, INTERNET TECHNOLOGY WEB COMMERCE, DATA COMMUNICATIONS, COMPUTER
+                                    ORGZ AND OPERATING SYSTEM, VISUAL BASIC, NETWORK PROGRAMMING</option>
+                                <option value="INCOME TAX, COST ACCOUNTANCY">INCOME TAX, COST ACCOUNTANCY</option>
+                                <option value="MANAGEMENT ACCOUNTANCY, COST ACCOUNTANCY">MANAGEMENT ACCOUNTANCY, COST
+                                    ACCOUNTANCY</option>
+                                <option value="CORPORATE ACCOUNTING, SALES TAX PROC & PRACTICE">CORPORATE ACCOUNTING,
+                                    SALES TAX PROC & PRACTICE</option>
+                                <option value="BOTANY, ZOOLOGY, CHEMISTRY">BOTANY, ZOOLOGY, CHEMISTRY</option>
+                                <option
+                                    value="Financial Markets and Institutions, Investment Management, Financial Services, International Financial Management">
+                                    Financial Markets and Institutions, Investment Management, Financial Services,
+                                    International Financial Management</option>
+                                <option value="MATHEMATICS, INDUSTRIAL ELECTRONICS, COMPUTER SCIENCE">MATHEMATICS,
+                                    INDUSTRIAL ELECTRONICS, COMPUTER SCIENCE</option>
+                                <option value="FOOD TECHNOLOGY, MICROBIOLOGY, CHEMISTRY">FOOD TECHNOLOGY, MICROBIOLOGY,
+                                    CHEMISTRY</option>
+                                <option value="History, Advance Telugu, Computer Application">History, Advance Telugu,
+                                    Computer Application</option>
+                                <option
+                                    value="Cloud Computing and Python, Web Technologies, Electronic Commerce and Enterprise Resource Planning and Jquery">
+                                    Cloud Computing and Python, Web Technologies, Electronic Commerce and Enterprise
+                                    Resource Planning and Jquery</option>
+                                <option value="Mathmatics, Analytical Chemistry, Chemistry">Mathmatics, Analytical
+                                    Chemistry, Chemistry</option>
+                                <option value="Economics, History, Archaeology">Economics, History, Archaeology</option>
+                                <option
+                                    value="Programming in Java, Internet Tech & Web Commerce, Data Commu., Software Engg., Object Oriented Modeling and Design">
+                                    Programming in Java, Internet Tech & Web Commerce, Data Commu., Software Engg.,
+                                    Object Oriented Modeling and Design</option>
+                                <option value="Financial Management, Advanced Taxation">Financial Management, Advanced
+                                    Taxation</option>
+                                <option
+                                    value="Household Economics, Family, Community Nutrition and diet theoraphy, Home Science Extension">
+                                    Household Economics, Family, Community Nutrition and diet theoraphy, Home Science
+                                    Extension</option>
+                                <option value="BIOCHEMISTRY, ZOOLOGY, CHEMISTRY">BIOCHEMISTRY, ZOOLOGY, CHEMISTRY
+                                </option>
+                                <option
+                                    value="Auditing, Insurance, Banking, cost and management accounting corporate accounting">
+                                    Auditing, Insurance, Banking, cost and management accounting corporate accounting
+                                </option>
+                                <option value="Financial Services, Marketing of Financial Services, Tally">Financial
+                                    Services, Marketing of Financial Services, Tally</option>
+                                <option value="Web Technologies, E-commerce, Advanced Accounting">Web Technologies,
+                                    E-commerce, Advanced Accounting</option>
+                                <option
+                                    value="Ass. Of Tax - Individual, HUF and Partnership, Goods and Services Tax and Customs">
+                                    Ass. Of Tax - Individual, HUF and Partnership, Goods and Services Tax and Customs
+                                </option>
+                                <option value="e-Commerce, Advertising and Packaging, e-Payment Systems">e-Commerce,
+                                    Advertising and Packaging, e-Payment Systems</option>
+                                <option value="Consumer Behaviour, Product Management, Sales Management">Consumer
+                                    Behaviour, Product Management, Sales Management</option>
+                                <option value="HISTORY, ECONOMICS, POLITICAL SCIENCE, CITIZENSHIP EDUCATION">HISTORY,
+                                    ECONOMICS, POLITICAL SCIENCE, CITIZENSHIP EDUCATION</option>
+                                <option
+                                    value="PRODUCTION & OPERATION MANAGEMENT, BUSINESS POLICY AND STRATEGIC MANAGEMENT, BUSSINESS LAW, INCOME TAX & TAX PLANNING, INTERNET TECHNOLOGY AND WEB COMMERCE, CITIZ">
+                                    PRODUCTION & OPERATION MANAGEMENT, BUSINESS POLICY AND STRATEGIC MANAGEMENT,
+                                    BUSSINESS LAW, INCOME TAX & TAX PLANNING, INTERNET TECHNOLOGY AND WEB COMMERCE,
+                                    CITIZ</option>
+                                <option
+                                    value="Talent Management, Leadership, Income Tax Assessment Procedures, Practice & Goods And Service Tax with Tally">
+                                    Talent Management, Leadership, Income Tax Assessment Procedures, Practice & Goods
+                                    And Service Tax with Tally</option>
+                                <option value="Commerce">Commerce</option>
+                                <option value="COMPUTER APPLICATIONS">COMPUTER APPLICATIONS</option>
+                                <option
+                                    value="Management Accounting and Practice, Cost Control Techniques, Big Data Analytics using R & Data Science using Python">
+                                    Management Accounting and Practice, Cost Control Techniques, Big Data Analytics
+                                    using R & Data Science using Python</option>
+                                <option
+                                    value="MANAGEMENT ACCOUNTING, COST CONTROL TECHNIQUES, LIFE INSURANCE WITH PRACTICE, GENL. INSURANCE WITH PRACTICE, INCOME TAX PROCEDURE & PRACTICE, GST WITH TALLY">
+                                    MANAGEMENT ACCOUNTING, COST CONTROL TECHNIQUES, LIFE INSURANCE WITH PRACTICE, GENL.
+                                    INSURANCE WITH PRACTICE, INCOME TAX PROCEDURE & PRACTICE, GST WITH TALLY</option>
+                                <option
+                                    value="COST AND MANAGEMENT ACCOUNTING, CORPORATE ACCOUNTING, ENTREPRENEURSHIP DEVELOPMENT PROGRAMME">
+                                    COST AND MANAGEMENT ACCOUNTING, CORPORATE ACCOUNTING, ENTREPRENEURSHIP DEVELOPMENT
+                                    PROGRAMME</option>
+                                <option value="Tourism, Advanced English, Economics">Tourism, Advanced English,
+                                    Economics</option>
+                                <option value="MATHEMATICS, STATISTICS, MANAGEMENT ACCOUNTING">MATHEMATICS, STATISTICS,
+                                    MANAGEMENT ACCOUNTING</option>
+                                <option value="Botany, Biotechnology, Chemistry">Botany, Biotechnology, Chemistry
+                                </option>
+                                <option
+                                    value="Management Accounting and Practice, Cost Control Techniques. e-Commerce & e-filing">
+                                    Management Accounting and Practice, Cost Control Techniques. e-Commerce & e-filing
+                                </option>
+                                <option
+                                    value="Advanced Corporate Accounting, Software Solutions to Accounting, Income Tax Procedure and Practice, GST with Tally, Big Data Analytics using R, Data Science using Python">
+                                    Advanced Corporate Accounting, Software Solutions to Accounting, Income Tax
+                                    Procedure and Practice, GST with Tally, Big Data Analytics using R, Data Science
+                                    using Python</option>
+                                <option value="Secretarial Practice, Internet Tech and e-Commerce">Secretarial Practice,
+                                    Internet Tech and e-Commerce</option>
+                                <option value="Botany, Chemistry, Horticulture">Botany, Chemistry, Horticulture</option>
+                                <option value="MATHEMATICS, PHYSICS(WITH MATHS), COMPUTER SCIENCE">MATHEMATICS,
+                                    PHYSICS(WITH MATHS), COMPUTER SCIENCE</option>
+                                <option
+                                    value="Management Accounting and Practice, Cost Control Techniques, Big Data Analytics using R & Essential Python Libraries for Data Science">
+                                    Management Accounting and Practice, Cost Control Techniques, Big Data Analytics
+                                    using R & Essential Python Libraries for Data Science</option>
+                                <option value="MATHEMATICS, STATISTICS (WITH MATHS), COMPUTER SCIENCE">MATHEMATICS,
+                                    STATISTICS (WITH MATHS), COMPUTER SCIENCE</option>
+                                <option value="HOME SCIENCE">HOME SCIENCE</option>
+                                <option value="Mathematics, Physics (With Maths), Chemistry">Mathematics, Physics (With
+                                    Maths), Chemistry</option>
+                                <option value="Social Sciences, English">Social Sciences, English</option>
+                                <option value="Social Sciences, Telugu">Social Sciences, Telugu</option>
+                                <option value="Social Sciences, Urdu">Social Sciences, Urdu</option>
+                                <option value="English and Social Studies">English and Social Studies</option>
+                                <option value="Mathematics, Physics, Renewable Energy">Mathematics, Physics, Renewable
+                                    Energy</option>
+                                <option
+                                    value="MANAGEMENT ACCOUNTING, COSTCONTROL TECHNIQUES, ADVERTISING&MEDIA PLANNING, SALES PROMOTION & PRACTICE, DIGITAL MARKETING, SERVICE MARKET">
+                                    MANAGEMENT ACCOUNTING, COSTCONTROL TECHNIQUES, ADVERTISING&MEDIA PLANNING, SALES
+                                    PROMOTION & PRACTICE, DIGITAL MARKETING, SERVICE MARKET</option>
+                                <option value="Geology">Geology</option>
+                                <option value="Zoology">Zoology</option>
+                                <option value="Statistics">Statistics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option
+                                    value="Advanced Corporate Accounting, Software Solutions to Accounting, Logistic Services & Practice, Exim Procedure & Practice, E-commerce, E-filing">
+                                    Advanced Corporate Accounting, Software Solutions to Accounting, Logistic Services &
+                                    Practice, Exim Procedure & Practice, E-commerce, E-filing</option>
+                                <option
+                                    value="Indian Heritage and culture and civilization, Human Values-I, Environmental Studies, Human Values-II.">
+                                    Indian Heritage and culture and civilization, Human Values-I, Environmental Studies,
+                                    Human Values-II.</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Part III</label>
+                            <select name="part_iii" id="partIIISelect" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                <option value="">Select Option</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2 lg:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700">Elective/Cluster Subjects</label>
+                            <input type="text" name="elective_subjects"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                        </div>
+                        <div class="md:col-span-2 lg:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700">Remarks</label>
+                            <textarea name="remarks" rows="2"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-6">
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Submit
+                            Application</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Download View -->
+            <div id="view-download-convocation" class="content-view hidden">
+                <h2 class="text-2xl font-bold mb-4">Download Convocation</h2>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 max-w-md">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Enter Hall Ticket Number</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="downloadHTNO" placeholder="e.g. HT123456"
+                            class="block w-full rounded-md border-gray-300 border p-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+                        <button id="downloadBtn"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Download
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">Enter the Hall Ticket Number provided during application
+                        submission.</p>
+                </div>
+            </div>
+
+            <!-- Generate Report View -->
+            <div id="view-generate-report" class="content-view hidden">
+                <h2 class="text-2xl font-bold mb-4">Generate Report (PDF)</h2>
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 max-w-2xl">
+                    <p class="mb-4 text-gray-600">Select the required filters to generate the certificate report.</p>
+                    <form id="generateReportForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Degree *</label>
+                                <select name="degree" id="reportDegreeSelect" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                    <option value="">Select Degree</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Faculty *</label>
+                                <select name="faculty" id="reportFacultySelect" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                                    <option value="">Select Faculty</option>
+                                </select>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-700">Reg. No / Hall Ticket No
+                                    *</label>
+                                <input type="text" name="hall_ticket_no" id="reportHTNO" required
+                                    placeholder="Enter Exact Hall Ticket Number"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50 border p-2">
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-4">
+                            <button type="submit" id="generateReportBtn" disabled
+                                class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+                                Generate PDF
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Edit View -->
+            <div id="view-edit-convocation" class="content-view hidden">
+                <h2 class="text-2xl font-bold mb-4">Edit Application</h2>
+                <div class="max-w-md mb-6">
+                    <label class="block text-sm font-medium text-gray-700">Enter Hall Ticket Number</label>
+                    <div class="flex mt-1">
+                        <input type="text" id="editSearchHTNO"
+                            class="block w-full rounded-l-md border-gray-300 border p-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button id="searchForEditBtn"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700">Search</button>
+                    </div>
+                </div>
+                <div id="editFormContainer">
+                    <!-- Form will be cloned/injected here -->
+                </div>
+            </div>
+
+            <!-- Manage Categories View -->
+            <div id="view-manage-categories" class="content-view hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Manage Categories</h2>
+                    <button id="addCategoryBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                        + Add New Category
+                    </button>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    ID</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Code</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Name</th>
+                                <th
+                                    class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoriesTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal -->
+                <div id="categoryModal"
+                    class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                    <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                        <h3 class="text-lg font-bold mb-4" id="modalTitle">Add Category</h3>
+                        <form id="categoryForm">
+                            <input type="hidden" name="id" id="catId">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Category Code</label>
+                                <input type="text" name="category_code" id="catCode"
+                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2">Category Name</label>
+                                <input type="text" name="category_name" id="catName"
+                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    required>
+                            </div>
+                            <div class="flex justify-end gap-2">
+                                <button type="button" id="closeModalBtn"
+                                    class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                                <button type="submit"
+                                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Manage Degrees View -->
+        <div id="view-manage-degrees" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Degrees</h2>
+                <button id="addDegreeBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Degree
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="degreesTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="degreeModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="degreeModalTitle">Add Degree</h3>
+                    <form id="degreeForm">
+                        <input type="hidden" name="id" id="degId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Degree Code</label>
+                            <input type="text" name="degree_code" id="degCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Degree Name</label>
+                            <input type="text" name="degree_name" id="degName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closeDegreeModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Faculties View -->
+        <div id="view-manage-faculties" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Faculties</h2>
+                <button id="addFacultyBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Faculty
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="facultiesTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="facultyModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="facultyModalTitle">Add Faculty</h3>
+                    <form id="facultyForm">
+                        <input type="hidden" name="id" id="facId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Faculty Code</label>
+                            <input type="text" name="faculty_code" id="facCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Faculty Name</label>
+                            <input type="text" name="faculty_name" id="facName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closeFacultyModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Courses View -->
+        <div id="view-manage-courses" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Courses</h2>
+                <button id="addCourseBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Course
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="coursesTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="courseModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="courseModalTitle">Add Course</h3>
+                    <form id="courseForm">
+                        <input type="hidden" name="id" id="courseId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Course Code</label>
+                            <input type="text" name="course_code" id="courseCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Course Name</label>
+                            <input type="text" name="course_name" id="courseName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closeCourseModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manage Subjects View -->
+        <div id="view-manage-subjects" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Subjects</h2>
+                <button id="addSubjectBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Subject
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subjectsTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="subjectModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="subjectModalTitle">Add Subject</h3>
+                    <form id="subjectForm">
+                        <input type="hidden" name="id" id="subjectId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Subject Code</label>
+                            <input type="text" name="subject_code" id="subjectCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Subject Name</label>
+                            <input type="text" name="subject_name" id="subjectName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closeSubjectModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+        <!-- Manage Specializations View -->
+        <div id="view-manage-specializations" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Specializations</h2>
+                <button id="addSpecializationBtn"
+                    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Specialization
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="specializationsTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="specializationModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="specializationModalTitle">Add Specialization</h3>
+                    <form id="specializationForm">
+                        <input type="hidden" name="id" id="specializationId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Specialization Code</label>
+                            <input type="text" name="specialization_code" id="specializationCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Specialization Name</label>
+                            <input type="text" name="specialization_name" id="specializationName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closeSpecializationModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Manage Mediums View -->
+        <div id="view-manage-mediums" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Mediums</h2>
+                <button id="addMediumBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Medium
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="mediumsTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="mediumModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="mediumModalTitle">Add Medium</h3>
+                    <form id="mediumForm">
+                        <input type="hidden" name="id" id="mediumId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Medium Code</label>
+                            <input type="text" name="medium_code" id="mediumCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Medium Name</label>
+                            <input type="text" name="medium_name" id="mediumName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closeMediumModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Manage Payment Categories View -->
+        <div id="view-manage-payment-categories" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Payment Categories</h2>
+                <button id="addPaymentCategoryBtn"
+                    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Category
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentCategoriesTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="paymentCategoryModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="paymentCategoryModalTitle">Add Payment Category</h3>
+                    <form id="paymentCategoryForm">
+                        <input type="hidden" name="id" id="paymentCategoryId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Category Code</label>
+                            <input type="text" name="category_code" id="paymentCategoryCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Category Name</label>
+                            <input type="text" name="category_name" id="paymentCategoryName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closePaymentCategoryModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Manage Payment Modes View -->
+        <div id="view-manage-payment-modes" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Payment Modes</h2>
+                <button id="addPaymentModeBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Mode
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentModesTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="paymentModeModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="paymentModeModalTitle">Add Payment Mode</h3>
+                    <form id="paymentModeForm">
+                        <input type="hidden" name="id" id="paymentModeId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Mode Code</label>
+                            <input type="text" name="mode_code" id="paymentModeCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Mode Name</label>
+                            <input type="text" name="mode_name" id="paymentModeName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closePaymentModeModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Manage Convocation Issued View -->
+        <div id="view-manage-convocation-issued" class="content-view hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Manage Convocation Issued In</h2>
+                <button id="addConvocationIssuedBtn"
+                    class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                    + Add New Item
+                </button>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Name</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="convocationIssuedTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal -->
+            <div id="convocationIssuedModal"
+                class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full flex items-center justify-center z-50">
+                <div class="relative p-5 border w-96 shadow-lg rounded-md bg-white">
+                    <h3 class="text-lg font-bold mb-4" id="convocationIssuedModalTitle">Add Item</h3>
+                    <form id="convocationIssuedForm">
+                        <input type="hidden" name="id" id="convocationIssuedId">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Code</label>
+                            <input type="text" name="issued_code" id="convocationIssuedCode"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Name</label>
+                            <input type="text" name="issued_name" id="convocationIssuedName"
+                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required>
+                        </div>
+                        <div class="flex justify-end gap-2">
+                            <button type="button" id="closeConvocationIssuedModalBtn"
+                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Cancel</button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

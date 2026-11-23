@@ -91,10 +91,47 @@ apiRouter.use('/convocation', convocationRoutes);
 apiRouter.use('/master', masterRoutes);
 apiRouter.use('/reports', require('./routes/reports'));
 
-// Mount router on /api, /.netlify/functions/app, and root /
+// Mount API router on /api and /.netlify/functions/app
 app.use('/api', apiRouter);
 app.use('/.netlify/functions/app', apiRouter);
-app.use('/', apiRouter);
+
+// Serve Frontend Static Files (from server/public, client/dist, or public_html)
+const clientDistCandidates = [
+    path.resolve(__dirname, './public'),
+    path.resolve(__dirname, '../client/dist'),
+    path.resolve(__dirname, '../../public_html'),
+    path.resolve(__dirname, '../public_html')
+];
+
+const clientDistPath = clientDistCandidates.find(p => fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html')));
+
+if (clientDistPath) {
+    console.log(`[Server] Serving frontend static files from: ${clientDistPath}`);
+    app.use(express.static(clientDistPath));
+
+    // Clean routes for login and register
+    app.get('/login', (req, res) => {
+        const loginFile = path.join(clientDistPath, 'login.html');
+        if (fs.existsSync(loginFile)) return res.sendFile(loginFile);
+        res.sendFile(path.join(clientDistPath, 'index.html'));
+    });
+
+    app.get('/register', (req, res) => {
+        const regFile = path.join(clientDistPath, 'register.html');
+        if (fs.existsSync(regFile)) return res.sendFile(regFile);
+        res.sendFile(path.join(clientDistPath, 'index.html'));
+    });
+
+    // SPA fallback: any non-API GET request serves index.html
+    app.get('*', (req, res, next) => {
+        if (req.path.startsWith('/api') || req.path.startsWith('/.netlify')) {
+            return next();
+        }
+        res.sendFile(path.join(clientDistPath, 'index.html'));
+    });
+} else {
+    app.use('/', apiRouter);
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {
