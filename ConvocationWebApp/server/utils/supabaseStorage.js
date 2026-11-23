@@ -1,15 +1,18 @@
 const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://kgmvydgghddaqkqscjpb.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY;
+const DEFAULT_SUPABASE_URL = 'https://afusskwtfoxslmhjioma.supabase.co';
+const DEFAULT_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnbXZ5ZGdnaGRkYXFrcXNjanBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MDg0MDksImV4cCI6MjA5MjE4NDQwOX0.drAYTMIJjD0NzZtGUkpBiK4GQ2nyMjVGNCaDlZT-ro4';
+
+const SUPABASE_URL = process.env.SUPABASE_URL || DEFAULT_SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.SUPABASE_ANON_KEY || DEFAULT_SUPABASE_KEY;
 const DEFAULT_BUCKET = process.env.SUPABASE_BUCKET || 'uploads';
 
 let supabase = null;
 
 const getSupabaseClient = () => {
     if (supabase) return supabase;
-    const url = (process.env.SUPABASE_URL || 'https://kgmvydgghddaqkqscjpb.supabase.co').trim();
+    const url = (process.env.SUPABASE_URL || DEFAULT_SUPABASE_URL).trim();
     const key = (
         process.env.SUPABASE_SERVICE_ROLE_KEY ||
         process.env.SUPABASE_KEY ||
@@ -18,7 +21,7 @@ const getSupabaseClient = () => {
         process.env.VITE_SUPABASE_KEY ||
         process.env.supabase_key ||
         process.env.supabase_anon_key ||
-        ''
+        DEFAULT_SUPABASE_KEY
     ).trim();
 
     if (url && key) {

@@ -10,7 +10,8 @@ require('dotenv').config();
 // Fix PostgreSQL DATE (OID 1082) parsing so it returns exact 'YYYY-MM-DD' strings without timezone/UTC drift
 types.setTypeParser(1082, (val) => val);
 
-const dbUrl = (process.env.DATABASE_URL || process.env.SUPABASE_DB_URL || '').trim();
+const defaultDbUrl = 'postgresql://postgres.afusskwtfoxslmhjioma:Saniya141978@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres';
+const dbUrl = (process.env.DATABASE_URL || process.env.SUPABASE_DB_URL || defaultDbUrl).trim();
 
 const poolConfig = {
     connectionString: dbUrl || undefined,
@@ -293,9 +294,6 @@ const initDb = async () => {
 module.exports = {
     pool,
     query: (text, params) => {
-        if (!process.env.DATABASE_URL && !process.env.SUPABASE_DB_URL) {
-            throw new Error('DATABASE_URL is not configured in Netlify Environment Variables. Please set DATABASE_URL in the Netlify site settings.');
-        }
         return pool.query(text, params);
     },
     initDb
