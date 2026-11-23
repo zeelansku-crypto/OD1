@@ -5,6 +5,8 @@ node_modules/
 # Environment Variables & Secrets
 .env
 **/.env
+.env.*
+**/.env.*
 .env.local
 **/.env.local
 .env.*.local
@@ -29,6 +31,7 @@ yarn-debug.log*
 pnpm-debug.log*
 
 # Test & Sample outputs
+*.zip
 login error1.png
 ConvocationWebApp/server/sample_report_*.pdf
 ConvocationWebApp/server/test_report_output.pdf

@@ -1,0 +1,30 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # 1. Reverse Proxy /api requests to Node.js backend running on port 5000
+  RewriteCond %{REQUEST_URI} ^/api/ [NC]
+  RewriteRule ^api/(.*)$ http://127.0.0.1:5000/api/$1 [P,L]
+
+  # 2. Serve existing files/directories directly (CSS, JS, images)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 3. Clean routes for login and register
+  RewriteRule ^login/?$ login.html [L]
+  RewriteRule ^register/?$ register.html [L]
+
+  # 4. Fallback all SPA routes to index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Security & CORS Headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Access-Control-Allow-Origin "*"
+  Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+  Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
